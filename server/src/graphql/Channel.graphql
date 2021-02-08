@@ -1,0 +1,15 @@
+type Channel {
+  id: String!
+  name: String
+  users: [User!]!
+  messages: [Message]!
+}
+
+type Query {
+  getChannel(id: String): Channel
+  getAllChannels: [Channel]
+}
+
+type Mutation {
+  createChannel(name: String): Channel
+}

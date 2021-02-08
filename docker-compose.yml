@@ -1,0 +1,38 @@
+# Ease local api development by providing the db / graphql layers only
+
+version: "3.7"
+
+services:
+  db:
+    image: postgres:11.7-alpine
+    environment:
+      POSTGRES_USER: "chatr"
+      POSTGRES_PASSWORD: "testing"
+      POSTGRES_DB: "mydb"
+    ports:
+      - "5432:5432"
+    expose:
+      - "5432"
+    volumes:
+      - db-data-postgres:/var/lib/postgresql/data
+
+  # server:
+  #   image: node:14.15.4-alpine3.10
+  #   restart: always
+  #   working_dir: /server
+  #   volumes:
+  #     - ./server:/server
+  #   depends_on:
+  #     - db
+  #   ports:
+  #     - "8020:8020"
+  #   expose:
+  #     - "8020"
+  #   # command: cd app && yarn install --frozen-lockfile && yarn start:watch
+  #   command: sh -c '
+  #     echo "Running Install" && yarn install --frozen-lockfile && echo "Running Server" && npx prisma generate && yarn start:watch'
+
+volumes:
+  db-data-postgres:
+  # app:
+    

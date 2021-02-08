@@ -1,0 +1,13 @@
+type Message {
+  id: String!
+  text: String!
+  author: User!
+}
+
+type Query {
+  getMessages(id: String): [Message]
+}
+
+type Mutation {
+  createMessage(channelId: String, text: String, userId: String): Message
+}
