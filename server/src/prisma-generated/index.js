@@ -52,7 +52,7 @@ Prisma.raw = raw
 Prisma.validator = () => (val) => val
 
 
-const dirnamePolyfill = path.join(process.cwd(), "src\\prisma-generated")
+const dirnamePolyfill = path.join(process.cwd(), "src/prisma-generated")
 const dirname = __dirname.length === 1 ? dirnamePolyfill : __dirname
 
 /**
@@ -117,18 +117,18 @@ const config = {
   "generator": {
     "name": "client",
     "provider": "prisma-client-js",
-    "output": "F:\\Development\\Chatr\\server\\src\\prisma-generated",
+    "output": "/app/src/prisma-generated",
     "binaryTargets": [],
     "previewFeatures": [],
     "config": {},
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": "..\\..\\.env",
-    "schemaEnvPath": "..\\..\\.env"
+    "rootEnvPath": "../../.env",
+    "schemaEnvPath": "../../.env"
   },
   "sqliteDatasourceOverrides": [],
-  "relativePath": "..\\..\\prisma",
+  "relativePath": "../../prisma",
   "clientVersion": "2.16.0",
   "engineVersion": "854c8ba7f0dce66f115af36af24e66989a8c02a1",
   "datasourceNames": [
@@ -159,12 +159,12 @@ Object.assign(exports, Prisma)
  * In order to make `ncc` and `@vercel/nft` happy.
  * The process.cwd() annotation is only needed for https://github.com/vercel/vercel/tree/master/packages/now-next
 **/
-path.join(__dirname, 'query-engine-windows');
-path.join(process.cwd(), './src\prisma-generated\query-engine-windows');
+path.join(__dirname, 'query-engine-linux-musl');
+path.join(process.cwd(), './src/prisma-generated/query-engine-linux-musl');
 
 /**
  * Annotation for `@vercel/nft`
  * The process.cwd() annotation is only needed for https://github.com/vercel/vercel/tree/master/packages/now-next
 **/
 path.join(__dirname, 'schema.prisma');
-path.join(process.cwd(), './src\prisma-generated\schema.prisma');
+path.join(process.cwd(), './src/prisma-generated/schema.prisma');

@@ -9,7 +9,6 @@ export const createUser = async (
   context: Context,
   _info: GraphQLResolveInfo
 ): Promise<User> => {
-  console.log("test");
   return await context.db.user.create({
     data: args,
   });

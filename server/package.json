@@ -4,7 +4,8 @@
   "license": "MIT",
   "scripts": {
     "start": "ts-node ./src/index.ts",
-    "start:watch": "nodemon"
+    "start:watch": "nodemon",
+    "dev": "nodemon -L -e ts,json --exec 'yarn start'"
   },
   "dependencies": {
     "@prisma/cli": "^2.16.0",

@@ -14,25 +14,37 @@ services:
     expose:
       - "5432"
     volumes:
-      - db-data-postgres:/var/lib/postgresql/data
+      - db:/var/lib/postgresql/data
 
-  # server:
-  #   image: node:14.15.4-alpine3.10
-  #   restart: always
-  #   working_dir: /server
-  #   volumes:
-  #     - ./server:/server
-  #   depends_on:
-  #     - db
-  #   ports:
-  #     - "8020:8020"
-  #   expose:
-  #     - "8020"
-  #   # command: cd app && yarn install --frozen-lockfile && yarn start:watch
-  #   command: sh -c '
-  #     echo "Running Install" && yarn install --frozen-lockfile && echo "Running Server" && npx prisma generate && yarn start:watch'
+  server:
+    image: node:14.15.4-alpine3.10
+    environment: 
+      DATABASE_URL: "postgresql://chatr:testing@192.168.86.39:5432/mydb?schema=public"
+    volumes:
+      - ./server:/app
+    depends_on:
+      - db
+    ports:
+      - "8020:8020"
+    expose:
+      - "8020"
+    command: sh -c 'cd app && yarn install --frozen-lockfile && yarn dev'
+
+  client:
+    image: node:14.15.4-alpine3.10
+    environment: 
+      REACT_APP_GRAPHQL_ENDPOINT: "https://192.168.86.39:8020/graphql"
+    volumes:
+      - ./client:/client
+    depends_on:
+      - server
+    ports:
+      - "3000:3000"
+    expose:
+      - "3000"
+    command: sh -c 'cd client && yarn install --frozen-lockfile && yarn start'
 
 volumes:
-  db-data-postgres:
-  # app:
-    
+  db:
+  server:
+  client:
