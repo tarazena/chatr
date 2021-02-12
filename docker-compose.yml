@@ -19,7 +19,7 @@ services:
   server:
     image: node:14.15.4-alpine3.10
     environment: 
-      DATABASE_URL: "postgresql://chatr:testing@192.168.86.39:5432/mydb?schema=public"
+      DATABASE_URL: postgresql://chatr:testing@db:5432/mydb?schema=public
     volumes:
       - ./server:/app
     depends_on:
@@ -33,11 +33,11 @@ services:
   client:
     image: node:14.15.4-alpine3.10
     environment: 
-      REACT_APP_GRAPHQL_ENDPOINT: "https://192.168.86.39:8020/graphql"
+      REACT_APP_GRAPHQL_ENDPOINT: "https://localhost:8020/graphql"
     volumes:
       - ./client:/client
     depends_on:
-      - server
+      - db
     ports:
       - "3000:3000"
     expose:
