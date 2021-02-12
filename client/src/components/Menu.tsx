@@ -5,6 +5,7 @@ import {
   Drawer,
   IconButton,
   List,
+  Grid,
   ListItem,
   ListItemIcon,
   ListItemText,
@@ -59,7 +60,9 @@ export const Menu: FC<IMenu> = ({ open, handleClose }) => {
       </div>
       <Divider />
       {loading ? (
-        <CircularProgress />
+        <Grid container>
+          <CircularProgress />
+        </Grid>
       ) : (
         <List>
           {data?.getAllChannels?.map((x, index) => (

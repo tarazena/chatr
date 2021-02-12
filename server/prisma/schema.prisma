@@ -28,10 +28,9 @@ model Channel {
 }
 
 model User {
-  id        String    @id @default(uuid())
-  email     String    @unique
-  name      String?
-  Message   Message[]
-  Channel   Channel?  @relation(fields: [channelId], references: [id])
-  channelId String?
+  id       String    @id @default(uuid())
+  email    String    @unique
+  name     String?
+  channels Channel[]
+  Message  Message[]
 }
