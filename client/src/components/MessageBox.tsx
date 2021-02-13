@@ -30,7 +30,7 @@ export const MessageBox: FC<IMessageBox> = ({ channelId, userId }) => {
       },
     }
   );
-  
+
   const handleChange = (e: any) => {
     setMessage(e.currentTarget.value);
   };

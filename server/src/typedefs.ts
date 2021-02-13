@@ -6,6 +6,4 @@ const schema = loadSchemaSync('./**/*.graphql', {
   loaders: [new GraphQLFileLoader()]
 });
 
-const typeDefs = mergeTypeDefs([schema]);
-
-export default typeDefs;
+export const typeDefs = mergeTypeDefs([schema]);
