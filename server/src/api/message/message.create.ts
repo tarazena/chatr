@@ -16,8 +16,16 @@ export const createMessage = async (
   return await ctx.db.message.create({
     data: {
       text,
-      userId,
-      channelId,
+      Channel: {
+        connect: {
+          id: channelId
+        }
+      },
+      author: {
+        connect: {
+          id: userId
+        }
+      }
     },
     include: {
       author: true

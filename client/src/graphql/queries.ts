@@ -16,4 +16,12 @@ export const GET_ALL_CHANNELS = gql`
       }
     }
   }
-`
+`;
+
+export const GET_CHANNEL_MESSAGES = gql`
+  query getMessages($id: String) {
+    getMessages(id: $id) {
+      text
+    }
+  }
+`;

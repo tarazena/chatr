@@ -7,13 +7,25 @@ import {
   makeStyles,
   Typography,
 } from "@material-ui/core";
+import { useQuery } from "@apollo/client";
+import { GET_CHANNEL_MESSAGES, Query, QueryGetMessagesArgs } from "../graphql";
 
 interface IMessages {
   channelId: string;
 }
 
 export const Messages: FC<IMessages> = ({ channelId }) => {
-  if (!channelId) {
+  // Queries
+  const { data, loading } = useQuery<Query, QueryGetMessagesArgs>(
+    GET_CHANNEL_MESSAGES,
+    {
+      variables: {
+        id: channelId,
+      },
+    }
+  );
+
+  if (!channelId || loading) {
     return (
       <LayoutWrapper>
         <Typography>No Channel is selected</Typography>
@@ -22,10 +34,13 @@ export const Messages: FC<IMessages> = ({ channelId }) => {
   }
   return (
     <LayoutWrapper>
-      <ListItemText
-        primary="Cool. i am good, let's catch up!"
-        style={{ textAlign: "end" }}
-      />
+      {data?.getMessages?.map((x, index) => (
+        <ListItemText
+          key={`message-${index}`}
+          primary={x?.text}
+          style={{ textAlign: "end" }}
+        />
+      ))}
     </LayoutWrapper>
   );
 };

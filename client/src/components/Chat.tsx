@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import { FC, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Paper,
@@ -55,7 +55,7 @@ export const Chat: FC = () => {
         <Grid item xs={9}>
           <Messages channelId={channel} />
           <Divider />
-          <MessageBox />
+          <MessageBox userId={userId} channelId={channel} />
         </Grid>
       </Grid>
     </div>

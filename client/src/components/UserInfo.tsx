@@ -1,6 +1,7 @@
 import { useMutation } from "@apollo/client";
 import { Grid, Paper, TextField, Button } from "@material-ui/core";
 import React, { FC, useState } from "react";
+
 import { Mutation, MutationCreateUserArgs, CREATE_USER } from "../graphql";
 
 interface IUserInfo {
@@ -21,6 +22,9 @@ export const UserInfo: FC<IUserInfo> = ({ setUserId }) => {
       onCompleted: (data) => {
         console.log(data);
         data?.createUser?.id && setUserId(data?.createUser?.id);
+      },
+      onError: (error) => {
+        console.error(error.name, error.message);
       },
     }
   );

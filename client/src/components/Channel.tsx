@@ -1,5 +1,6 @@
+import { FC } from "react";
 import { ListItem, ListItemText } from "@material-ui/core";
-import React, { FC } from "react";
+
 import { Channel, Maybe } from "../graphql";
 
 interface IChannel {
