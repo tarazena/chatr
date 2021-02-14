@@ -8,11 +8,20 @@ import { makeExecutableSchema } from "@graphql-tools/schema";
 import { PrismaClient } from "./prisma-generated";
 import { typeDefs } from "./typedefs";
 import { resolvers } from "./resolvers";
+import { Client } from "pg";
+import PostgresPubSub from "./util/pgPubSub/PostgresPubSub";
 
 const PORT = 8020;
 
 /** Instantiate Apollo Server */
 async function server() {
+  // create your postgres client and connect to the database
+  const pgClient = new Client({ connectionString: process.env.DATABASE_URL });
+  await pgClient.connect();
+
+  // Instantiate your PubSub engine
+  const pubSub = new PostgresPubSub(pgClient);
+
   const app = express();
 
   const httpServer = http.createServer(app);

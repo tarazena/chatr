@@ -1,5 +1,7 @@
+import { pubSub } from "../../util/pgPubSub";
+
 export const messageAdded = {
   subscribe: () => {
-    return "hello";
+    return pubSub.asyncIterator("MESSAGE CREATED");
   },
 };
