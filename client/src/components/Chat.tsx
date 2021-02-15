@@ -7,9 +7,9 @@ import {
   List,
   CircularProgress,
 } from "@material-ui/core";
-import { useLazyQuery, useQuery, useSubscription } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 
-import { GET_ALL_CHANNELS, MESSAGE_ADDED, Query } from "../graphql";
+import { GET_ALL_CHANNELS, Query } from "../graphql";
 import { MessageBox, Messages, Channels, UserInfo } from ".";
 
 const useStyles = makeStyles({
@@ -35,20 +35,6 @@ export const Chat: FC = () => {
 
   // Queries and Mutations
   const { data, loading } = useQuery<Query>(GET_ALL_CHANNELS);
-  const [xd] = useLazyQuery<Query>(GET_ALL_CHANNELS);
-  const {
-    data: xData,
-    loading: xloading,
-  } = useSubscription(MESSAGE_ADDED, {
-    variables: {
-      channelId: "",
-    },
-    onSubscriptionData: (data) => {
-      xd();
-    }
-  });
-
-  console.log(xloading, xData?.messageAdded);
 
   return (
     <div>

@@ -74,6 +74,16 @@ export type Message = {
   author: User;
 };
 
+export type Subscription = {
+  __typename?: 'Subscription';
+  messageAdded?: Maybe<Channel>;
+};
+
+
+export type SubscriptionMessageAddedArgs = {
+  channelId: Scalars['ID'];
+};
+
 export type User = {
   __typename?: 'User';
   id: Scalars['String'];

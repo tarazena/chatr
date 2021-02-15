@@ -5,7 +5,5 @@ import { Client } from "pg";
 const pgClient = new Client({ connectionString: process.env.DATABASE_URL });
 pgClient.connect();
 
-// console.log(pgClient);
-
 // Instantiate your PubSub engine
 export const pubSub = new PostgresPubSub(pgClient);

@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import {
   List,
   ListItem,
@@ -7,8 +7,15 @@ import {
   makeStyles,
   Typography,
 } from "@material-ui/core";
-import { useQuery } from "@apollo/client";
-import { GET_CHANNEL_MESSAGES, Query, QueryGetMessagesArgs } from "../graphql";
+import { useQuery, useSubscription } from "@apollo/client";
+import {
+  GET_CHANNEL_MESSAGES,
+  MESSAGE_ADDED,
+  Query,
+  QueryGetMessagesArgs,
+  Subscription,
+  SubscriptionMessageAddedArgs,
+} from "../graphql";
 
 interface IMessages {
   channelId: string;
@@ -16,7 +23,7 @@ interface IMessages {
 
 export const Messages: FC<IMessages> = ({ channelId }) => {
   // Queries
-  const { data, loading } = useQuery<Query, QueryGetMessagesArgs>(
+  const { data, loading, refetch } = useQuery<Query, QueryGetMessagesArgs>(
     GET_CHANNEL_MESSAGES,
     {
       variables: {
@@ -24,6 +31,21 @@ export const Messages: FC<IMessages> = ({ channelId }) => {
       },
     }
   );
+
+  const { data: subData } = useSubscription<Subscription, SubscriptionMessageAddedArgs>(MESSAGE_ADDED, {
+    variables: {
+      channelId,
+    },
+  });
+
+  useEffect(() => {
+    if (
+      subData &&
+      subData.messageAdded
+    ) {
+      refetch();
+    }
+  }, [subData, refetch, channelId]);
 
   if (!channelId || loading) {
     return (

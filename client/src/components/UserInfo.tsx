@@ -20,7 +20,6 @@ export const UserInfo: FC<IUserInfo> = ({ setUserId }) => {
     CREATE_USER,
     {
       onCompleted: (data) => {
-        console.log(data);
         data?.createUser?.id && setUserId(data?.createUser?.id);
       },
       onError: (error) => {

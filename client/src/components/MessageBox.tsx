@@ -22,7 +22,6 @@ export const MessageBox: FC<IMessageBox> = ({ channelId, userId }) => {
     CREATE_MESSAGE,
     {
       onCompleted: () => {
-        console.log("success");
         setMessage("");
       },
       onError: (error) => {
