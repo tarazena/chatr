@@ -1,15 +1,17 @@
-import { Container } from "@material-ui/core";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import React, { FC } from "react";
 
-import { Chat } from "./components";
-
+import { Chat, Login } from "./components";
 
 export const App: FC = () => {
   return (
-    <Container>
-      <main>
-        <Chat />
-      </main>
-    </Container>
+    <main>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/chat" element={<Chat />} />
+        </Routes>
+      </BrowserRouter>
+    </main>
   );
 };
