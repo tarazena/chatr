@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { CREATE_USER, Mutation, MutationCreateUserArgs } from "../graphql";
 
 interface IForm {
-  username: string;
+  name: string;
   email: string;
 }
 
@@ -22,7 +22,7 @@ export const Login: FC = () => {
   const classes = useStyles();
 
   // State
-  const [form, setForm] = useState<IForm>({ email: "", username: "" });
+  const [form, setForm] = useState<IForm>({ email: "", name: "" });
 
   // Navigation
   const navigate = useNavigate();
@@ -32,12 +32,11 @@ export const Login: FC = () => {
     CREATE_USER,
     {
       onCompleted: (data) => {
-        data?.createUser?.id &&
-          navigate("/chat", {
-            state: {
-              id: data?.createUser?.id,
-            },
-          });
+        navigate("/chat", {
+          state: {
+            id: data?.createUser?.id,
+          },
+        });
       },
       onError: (error) => {
         console.error(error.name, error.message);
@@ -58,13 +57,15 @@ export const Login: FC = () => {
           variant="outlined"
           fullWidth
           label="User Name"
-          value={form.username}
+          required
+          value={form.name}
           onChange={(e) =>
-            setForm({ ...form, username: e.currentTarget.value })
+            setForm({ ...form, name: e.currentTarget.value })
           }
         />
         <TextField
           fullWidth
+          required
           variant="outlined"
           label="Email"
           value={form.email}
@@ -74,11 +75,12 @@ export const Login: FC = () => {
         <Button
           variant="outlined"
           fullWidth
-          onClick={() =>
-            createUser({
-              variables: form,
-            })
-          }
+          onClick={() => {
+            if (!!form.email && !!form.name)
+              createUser({
+                variables: form,
+              });
+          }}
         >
           Log in
         </Button>

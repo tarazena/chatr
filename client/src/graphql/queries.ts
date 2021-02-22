@@ -25,3 +25,13 @@ export const GET_CHANNEL_MESSAGES = gql`
     }
   }
 `;
+
+export const GET_USERS = gql`
+  {
+    getUserAll {
+      id
+      name
+      email
+    }
+  }
+`;

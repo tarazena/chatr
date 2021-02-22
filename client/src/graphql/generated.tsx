@@ -25,6 +25,7 @@ export type Query = {
   getAllChannels?: Maybe<Array<Maybe<Channel>>>;
   getMessages?: Maybe<Array<Maybe<Message>>>;
   getUser?: Maybe<User>;
+  getUserAll?: Maybe<Array<Maybe<User>>>;
 };
 
 
@@ -52,6 +53,7 @@ export type Mutation = {
 
 export type MutationCreateChannelArgs = {
   name?: Maybe<Scalars['String']>;
+  users: Array<Maybe<Scalars['String']>>;
 };
 
 

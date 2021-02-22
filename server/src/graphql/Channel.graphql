@@ -11,5 +11,5 @@ type Query {
 }
 
 type Mutation {
-  createChannel(name: String): Channel
+  createChannel(name: String, users: [String]!): Channel
 }

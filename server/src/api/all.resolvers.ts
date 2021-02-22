@@ -1,5 +1,5 @@
 import { createChannel, getChannel, getAllChannels } from "./channel";
-import { createUser, getUser } from "./user";
+import { createUser, getUser, getUserAll } from "./user";
 import { createMessage, getMessages, messageAdded } from "./message";
 
 export default {
@@ -8,6 +8,7 @@ export default {
     getMessages,
     getChannel,
     getAllChannels,
+    getUserAll
   },
   Mutation: {
     createUser,

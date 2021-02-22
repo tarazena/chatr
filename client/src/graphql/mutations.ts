@@ -15,3 +15,11 @@ export const CREATE_USER = gql`
     }
   }
 `;
+
+export const CREATE_CHANNEL = gql`
+  mutation createChannel($name: String, $users: [String]!) {
+    createChannel(name: $name, users: $users) {
+      id
+    }
+  }
+`;

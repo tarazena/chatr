@@ -8,12 +8,22 @@ import {
   CircularProgress,
   ListItem,
   ListItemText,
+  ListItemSecondaryAction,
+  Button,
 } from "@material-ui/core";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 
-import { GET_ALL_CHANNELS, Query } from "../graphql";
+import {
+  CREATE_CHANNEL,
+  GET_ALL_CHANNELS,
+  GET_USERS,
+  Query,
+  Mutation,
+  MutationCreateChannelArgs,
+} from "../graphql";
 import { MessageBox, Messages, Channels } from ".";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { NewChatDialog } from "./NewChatDialog";
 
 const useStyles = makeStyles({
   root: {
@@ -40,14 +50,35 @@ interface IRouteState {
 export const Chat: FC = () => {
   // CSS
   const classes = useStyles();
-
+  // Location State
+  const routerState = useLocation();
+  const navigate = useNavigate();
   // State
   const [channel, setChannel] = useState("");
-  const routerState = useLocation();
   const [userId] = useState((routerState.state as IRouteState).id);
 
+  if (!userId) {
+    navigate("/");
+  }
+
+  const [showCreateChannel, setShowCreateChannel] = useState(false);
+
   // Queries and Mutations
-  const { data, loading } = useQuery<Query>(GET_ALL_CHANNELS);
+  const getAllChannels = useQuery<Query>(GET_ALL_CHANNELS);
+  const getAllUsers = useQuery<Query>(GET_USERS);
+  const [createChat] = useMutation<Mutation, MutationCreateChannelArgs>(
+    CREATE_CHANNEL,
+    {
+      onCompleted: (data) => {
+        setShowCreateChannel(false);
+        getAllChannels.refetch();
+        data.createChannel && setChannel(data.createChannel.id);
+      },
+      onError: (e) => {
+        console.warn(e);
+      },
+    }
+  );
 
   return (
     <Grid
@@ -56,6 +87,19 @@ export const Chat: FC = () => {
       justify="center"
       className={classes.root}
     >
+      <NewChatDialog
+        users={getAllUsers.data?.getUserAll}
+        open={showCreateChannel}
+        handleClose={() => setShowCreateChannel(false)}
+        createChat={(users, title) => {
+          createChat({
+            variables: {
+              users,
+              name: title,
+            },
+          });
+        }}
+      />
       <Grid
         xs={12}
         item
@@ -67,13 +111,21 @@ export const Chat: FC = () => {
           <List>
             <ListItem>
               <ListItemText>Chat Channels</ListItemText>
+              <ListItemSecondaryAction>
+                <Button
+                  variant="outlined"
+                  onClick={() => setShowCreateChannel(true)}
+                >
+                  New Chat
+                </Button>
+              </ListItemSecondaryAction>
             </ListItem>
             <Divider />
-            {loading ? (
+            {getAllChannels.loading ? (
               <CircularProgress />
             ) : (
               <Channels
-                channels={data?.getAllChannels}
+                channels={getAllChannels.data?.getAllChannels}
                 setSelectedChannel={(channel) => setChannel(channel)}
               />
             )}
