@@ -12,17 +12,6 @@ export const channelCreated = {
         };
       },
       payload
-    ) => {
-
-      console.log(
-        "P",
-        payload,
-        "V",
-        variables.channelCreated
-      );
-      return !!variables.channelCreated.users.find(
-        (x) => x.id === payload.userId
-      );
-    }
+    ) => !!variables.channelCreated.users.find((x) => x.id === payload.userId)
   ),
 };
