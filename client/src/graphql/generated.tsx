@@ -69,21 +69,27 @@ export type MutationCreateUserArgs = {
   email?: Maybe<Scalars['String']>;
 };
 
-export type Message = {
-  __typename?: 'Message';
-  id: Scalars['String'];
-  text: Scalars['String'];
-  author: User;
-};
-
 export type Subscription = {
   __typename?: 'Subscription';
+  channelCreated?: Maybe<Channel>;
   messageAdded?: Maybe<Channel>;
+};
+
+
+export type SubscriptionChannelCreatedArgs = {
+  userId: Scalars['ID'];
 };
 
 
 export type SubscriptionMessageAddedArgs = {
   channelId: Scalars['ID'];
+};
+
+export type Message = {
+  __typename?: 'Message';
+  id: Scalars['String'];
+  text: Scalars['String'];
+  author: User;
 };
 
 export type User = {

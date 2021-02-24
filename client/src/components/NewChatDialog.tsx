@@ -104,7 +104,7 @@ export const NewChatDialog: FC<INewChatDialog> = ({
         <Button onClick={handleClose} color="primary">
           Cancel
         </Button>
-        <Button onClick={() => createChat(personName, title)} color="secondary">
+        <Button onClick={() => {createChat(personName, title)}} color="secondary">
           Create
         </Button>
       </DialogActions>

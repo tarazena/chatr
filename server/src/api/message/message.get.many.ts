@@ -13,5 +13,8 @@ export const getMessages = async (
     where: {
       channelId: args.id,
     },
+    include: {
+      author: true
+    }
   });
 };

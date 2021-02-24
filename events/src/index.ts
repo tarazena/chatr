@@ -13,11 +13,11 @@ async function server() {
   // Instantiate your PubSub engine
   const pubSub = new PostgresPubSub(pgClient);
 
-  pubSub.subscribe("MESSAGE CREATED", () => {
-    console.log("EVENTS BABY");
+  pubSub.subscribe("MESSAGE CREATED", (message) => {
+    console.log("MESSAGE CREATED ON SERVER 2", message);
   });
 
-  console.log('EVENTS READY')
+  console.log('EVENTS SCRIPT READY')
 }
 
 try {

@@ -1,4 +1,4 @@
-import { createChannel, getChannel, getAllChannels } from "./channel";
+import { createChannel, getChannel, getAllChannels, channelCreated } from "./channel";
 import { createUser, getUser, getUserAll } from "./user";
 import { createMessage, getMessages, messageAdded } from "./message";
 
@@ -17,5 +17,6 @@ export default {
   },
   Subscription: {
     messageAdded,
+    channelCreated
   },
 };

@@ -7,3 +7,11 @@ export const MESSAGE_ADDED = gql`
     }
   }
 `;
+
+export const CHANNEL_CREATED = gql`
+  subscription channelCreated($userId: ID!) {
+    channelCreated(userId: $userId) {
+      id
+    }
+  }
+`;

@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from "react";
+import React, { FC } from "react";
 import {
   List,
   ListItem,
@@ -16,13 +16,16 @@ import {
   QueryGetMessagesArgs,
   Subscription,
   SubscriptionMessageAddedArgs,
+  User,
 } from "../graphql";
 
 interface IMessages {
   channelId: string;
+  userId: string;
+  users?: User[];
 }
 
-export const Messages: FC<IMessages> = ({ channelId }) => {
+export const Messages: FC<IMessages> = ({ channelId, userId, users }) => {
   // Queries
   const { data, loading, refetch } = useQuery<Query, QueryGetMessagesArgs>(
     GET_CHANNEL_MESSAGES,
@@ -30,24 +33,20 @@ export const Messages: FC<IMessages> = ({ channelId }) => {
       variables: {
         id: channelId,
       },
+      fetchPolicy: "network-only",
     }
   );
 
-  const { data: subData } = useSubscription<
-    Subscription,
-    SubscriptionMessageAddedArgs
-  >(MESSAGE_ADDED, {
+  useSubscription<Subscription, SubscriptionMessageAddedArgs>(MESSAGE_ADDED, {
     variables: {
       channelId,
     },
+    onSubscriptionData: ({ subscriptionData: { data } }) => {
+      if (data?.messageAdded?.id === channelId) {
+        refetch();
+      }
+    },
   });
- 
-  useEffect(() => {
-    if (subData && subData.messageAdded) {
-      console.log(subData.messageAdded)
-      refetch();
-    }
-  }, [subData, refetch, channelId]);
 
   if (!channelId || loading) {
     return (
@@ -65,7 +64,9 @@ export const Messages: FC<IMessages> = ({ channelId }) => {
   return (
     <>
       <ListItem style={{ padding: "12px 16px" }}>
-        <ListItemText>Chat With Someone</ListItemText>
+        <ListItemText>
+          Chat With {users?.map((x) => x.name).join(", ")}
+        </ListItemText>
       </ListItem>
       <Divider />
       <LayoutWrapper>
@@ -73,7 +74,7 @@ export const Messages: FC<IMessages> = ({ channelId }) => {
           <ListItemText
             key={`message-${index}`}
             primary={x?.text}
-            style={{ textAlign: "end" }}
+            style={{ textAlign: x?.author.id === userId ? "end" : "start" }}
           />
         ))}
       </LayoutWrapper>

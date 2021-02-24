@@ -9,9 +9,9 @@ import {
   ListItem,
   ListItemText,
   ListItemSecondaryAction,
-  Button,
+  IconButton,
 } from "@material-ui/core";
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation, useQuery, useSubscription } from "@apollo/client";
 
 import {
   CREATE_CHANNEL,
@@ -20,10 +20,14 @@ import {
   Query,
   Mutation,
   MutationCreateChannelArgs,
+  Subscription,
+  CHANNEL_CREATED,
+  SubscriptionChannelCreatedArgs,
 } from "../graphql";
 import { MessageBox, Messages, Channels } from ".";
 import { useLocation, useNavigate } from "react-router-dom";
 import { NewChatDialog } from "./NewChatDialog";
+import { Add } from "@material-ui/icons";
 
 const useStyles = makeStyles({
   root: {
@@ -64,8 +68,19 @@ export const Chat: FC = () => {
   const [showCreateChannel, setShowCreateChannel] = useState(false);
 
   // Queries and Mutations
-  const getAllChannels = useQuery<Query>(GET_ALL_CHANNELS);
-  const getAllUsers = useQuery<Query>(GET_USERS);
+  const getAllChannels = useQuery<Query>(GET_ALL_CHANNELS, {
+    context: {
+      headers: {
+        authorization: userId,
+      },
+    },
+    fetchPolicy: "network-only",
+  });
+
+  const getAllUsers = useQuery<Query>(GET_USERS, {
+    fetchPolicy: "network-only",
+  });
+
   const [createChat] = useMutation<Mutation, MutationCreateChannelArgs>(
     CREATE_CHANNEL,
     {
@@ -80,6 +95,20 @@ export const Chat: FC = () => {
     }
   );
 
+  useSubscription<Subscription, SubscriptionChannelCreatedArgs>(
+    CHANNEL_CREATED,
+    {
+      variables: {
+        userId,
+      },
+      onSubscriptionData: ({ subscriptionData: { data } }) => {
+        if (data) {
+          getAllChannels.refetch();
+        }
+      },
+    }
+  );
+
   return (
     <Grid
       container
@@ -88,13 +117,13 @@ export const Chat: FC = () => {
       className={classes.root}
     >
       <NewChatDialog
-        users={getAllUsers.data?.getUserAll}
+        users={getAllUsers.data?.getUserAll?.filter((x) => x?.id !== userId)}
         open={showCreateChannel}
         handleClose={() => setShowCreateChannel(false)}
         createChat={(users, title) => {
           createChat({
             variables: {
-              users,
+              users: [...users, userId],
               name: title,
             },
           });
@@ -112,12 +141,14 @@ export const Chat: FC = () => {
             <ListItem>
               <ListItemText>Chat Channels</ListItemText>
               <ListItemSecondaryAction>
-                <Button
-                  variant="outlined"
-                  onClick={() => setShowCreateChannel(true)}
+                <IconButton
+                  onClick={() => {
+                    getAllUsers.refetch();
+                    setShowCreateChannel(true);
+                  }}
                 >
-                  New Chat
-                </Button>
+                  <Add />
+                </IconButton>
               </ListItemSecondaryAction>
             </ListItem>
             <Divider />
@@ -132,7 +163,15 @@ export const Chat: FC = () => {
           </List>
         </Grid>
         <Grid item xs={9}>
-          <Messages channelId={channel} />
+          <Messages
+            channelId={channel}
+            userId={userId}
+            users={
+              getAllChannels.data?.getAllChannels?.find(
+                (x) => x?.id === channel
+              )?.users
+            }
+          />
           <Divider />
           <MessageBox userId={userId} channelId={channel} />
         </Grid>

@@ -9,12 +9,20 @@ export const getAllChannels = async (
   ctx: Context,
   _info: GraphQLResolveInfo
 ): Promise<Channel[] | null> => {
+  const id = ctx.request.headers.authorization;
   return await ctx.db.channel.findMany({
+    where: {
+      users: {
+        some: {
+          id
+        }
+      }
+    },
     include: {
       messages: {
         include: {
-          author: true
-        }
+          author: true,
+        },
       },
       users: true,
     },
