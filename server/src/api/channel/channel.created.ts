@@ -11,7 +11,9 @@ export const channelCreated = {
           users: User[];
         };
       },
-      payload
+      payload: {
+        userId: string;
+      }
     ) => !!variables.channelCreated.users.find((x) => x.id === payload.userId)
   ),
 };

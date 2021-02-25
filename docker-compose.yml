@@ -31,20 +31,27 @@ services:
       - "8020"
     command: sh -c 'cd server && yarn install --frozen-lockfile && yarn dev'
 
-  events:
+  analytics:
     image: node:14.15.4-alpine3.10
     environment: 
       DATABASE_URL: postgresql://chatr:testing@db:5432/mydb?schema=public
     volumes:
-      - ./events:/events
-      - /events/node_modules
+      - ./analytics:/analytics
+      - /analytics/node_modules
     depends_on:
       - db
-    ports:
-      - "8010:8010"
-    expose:
-      - "8010"
-    command: sh -c 'cd events && yarn install --frozen-lockfile && yarn dev'
+    command: sh -c 'cd analytics && yarn install --frozen-lockfile && yarn dev'
+
+  notifications:
+    image: node:14.15.4-alpine3.10
+    environment: 
+      DATABASE_URL: postgresql://chatr:testing@db:5432/mydb?schema=public
+    volumes:
+      - ./notifications:/notifications
+      - /notifications/node_modules
+    depends_on:
+      - db
+    command: sh -c 'cd notifications && yarn install --frozen-lockfile && yarn dev'
 
   client:
     image: node:14.15.4-alpine3.10
@@ -64,5 +71,6 @@ services:
 volumes:
   db:
   server:
-  events:
+  notifications:
+  analytics:
   client:

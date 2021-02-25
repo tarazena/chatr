@@ -14,10 +14,14 @@ async function server() {
   const pubSub = new PostgresPubSub(pgClient);
 
   pubSub.subscribe("MESSAGE CREATED", (message) => {
-    console.log("MESSAGE CREATED ON SERVER 2", message);
+    console.log("Sending message data to analytics DB", message);
   });
 
-  console.log('EVENTS SCRIPT READY')
+  pubSub.subscribe("CHANNEL CREATED", (message) => {
+    console.log("Sending channel data to analytics DB", message);
+  });
+
+  console.log("🚀 Analytics Server Ready");
 }
 
 try {
