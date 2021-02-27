@@ -34,3 +34,16 @@ Layout of the architecture
 ### Client
 - A simple react app, using Material UI for the chat
 - uses [Apollo Client](https://www.apollographql.com/docs/react/) to communicate with the server.
+
+
+## Requirements
+- Docker
+
+## How to use
+- Run `docker-compose up` (do no include `-d` because its needed to view the logs, other wise feel free inspect the docker images individually) in the root directory of the repo, this command will create a PostgreSQL DB and will spin up the servers along with the client.
+
+- Open two (or more) your browser tabs, head to `http://localhost:3000` to lunch the client up, you can type any user/email (User 1/User 1 works), the users names/emails are unique so you should name them in a unique way.
+
+- In one of the browser windows, click on the + button to create a chat with the other user(s)
+
+- Once the chat is created, you will see that the other browser windows already fetched the data, and also there are some events that got fired in the notifications/analytics servers as well.
