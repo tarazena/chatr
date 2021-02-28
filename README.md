@@ -47,3 +47,7 @@ Layout of the architecture
 - In one of the browser windows, click on the + button to create a chat with the other user(s)
 
 - Once the chat is created, you will see that the other browser windows already fetched the data, and also there are some events that got fired in the notifications/analytics servers as well.
+
+
+## Hints
+You can connect to the database and explore it via `prisma studio`, just head into `server` folder and type `npx prisma studio`, if it asks for the database url, you can type `$env:DATABASE_URL="postgresql://chatr:testing@db:5432/mydb?schema=public"` in Windows PowerShell or `export DATABASE_URL="postgresql://chatr:testing@db:5432/mydb?schema=public"` in shell.
