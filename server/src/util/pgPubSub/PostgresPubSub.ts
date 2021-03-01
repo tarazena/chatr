@@ -10,7 +10,7 @@ export default class PostgresPubSub implements PubSubEngine {
   };
   private subIdCounter: number;
 
-  constructor(pgClient: Client, reviver?: any) {
+  constructor(pgClient: Client, reviver?: (key: string, value: any) => any) {
     this.eventEmitter = new PostgresIPC(pgClient, reviver);
     this.subscriptions = {};
     this.subIdCounter = 0;

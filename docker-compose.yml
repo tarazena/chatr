@@ -18,7 +18,7 @@ services:
 
   server:
     image: node:14.15.4-alpine3.10
-    environment: 
+    environment:
       DATABASE_URL: postgresql://chatr:testing@db:5432/mydb?schema=public
     volumes:
       - ./server:/server
@@ -31,9 +31,24 @@ services:
       - "8020"
     command: sh -c 'cd server && yarn install --frozen-lockfile && yarn dev'
 
+  prisma-studio:
+    image: node:14.15.4-alpine3.10
+    environment:
+      DATABASE_URL: postgresql://chatr:testing@db:5432/mydb?schema=public
+    volumes:
+      - ./server:/prisma-studio
+      - /server/node_modules
+    depends_on:
+      - db
+    ports:
+      - "5555:5555"
+    expose:
+      - "5555"
+    command: sh -c 'cd prisma-studio && yarn install --frozen-lockfile && npx prisma studio'
+
   analytics:
     image: node:14.15.4-alpine3.10
-    environment: 
+    environment:
       DATABASE_URL: postgresql://chatr:testing@db:5432/mydb?schema=public
     volumes:
       - ./analytics:/analytics
@@ -44,7 +59,7 @@ services:
 
   notifications:
     image: node:14.15.4-alpine3.10
-    environment: 
+    environment:
       DATABASE_URL: postgresql://chatr:testing@db:5432/mydb?schema=public
     volumes:
       - ./notifications:/notifications
@@ -55,7 +70,7 @@ services:
 
   client:
     image: node:14.15.4-alpine3.10
-    environment: 
+    environment:
       REACT_APP_GRAPHQL_ENDPOINT: "https://localhost:8020/graphql"
     volumes:
       - ./client:/client
@@ -74,3 +89,4 @@ volumes:
   notifications:
   analytics:
   client:
+  prisma-studio:
